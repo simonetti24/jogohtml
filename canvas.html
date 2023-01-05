@@ -1,0 +1,54 @@
+<html>
+  <body>
+    <canvas id ="folha" width="600" height="500"></canvas>
+
+    <script>
+      window.onload = function(){
+        setInterval(executar, 1000/30);
+      }
+
+      var posicaoBolaX = 10;
+      var posicaoBolaY = 10;
+      var velocidadeBolaPosicaoX = 3;
+      var velocidadeBolaPosicaoY = 3;
+
+        function executar(){
+            var folhaDesenho = document.getElementById("folha");
+            var areaDesenho = folhaDesenho.getContext("2d");
+
+            var larguraCampo = 600 ;
+            var alturaCampo = 500;
+            var espessuraRede = 5;
+
+            var diametroBola = 10;
+
+            //Cor Verde
+            areaDesenho.fillStyle = "#286047" ;
+            areaDesenho.fillRect(0, 0, larguraCampo, alturaCampo);
+
+            //CorBranca
+            areaDesenho.fillStyle = "#ffffff" ;
+            areaDesenho.fillRect(larguraCampo/2 - espessuraRede/2 , 0, espessuraRede, alturaCampo);
+
+            //Posição da bola
+            areaDesenho.fillRect(posicaoBolaX - diametroBola / 2, posicaoBolaY - diametroBola / 2, diametroBola, diametroBola);
+
+
+            posicaoBolaX = posicaoBolaX +  velocidadeBolaPosicaoX ;
+            posicaoBolaY = posicaoBolaY + velocidadeBolaPosicaoY ;
+
+            //verificar lateral superior
+          if (posicaoBolaY < 0 && velocidadeBolaPosicaoY < 0) {
+            velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;
+          }
+
+          //verificar lateral inferior
+        if (posicaoBolaY > alturaCampo && velocidadeBolaPosicaoY > 0) {
+          velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;
+        }
+
+            console.log("tic-tac");
+        }
+      </script>
+  </body>
+</html>
