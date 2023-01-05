@@ -7,20 +7,36 @@
         setInterval(executar, 1000/30);
       }
 
+      var folhaDesenho = document.getElementById("folha");
+      var areaDesenho = folhaDesenho.getContext("2d");
+
+      var larguraCampo = 600 ;
+      var alturaCampo = 500;
+      var espessuraRede = 5;
+
+      var diametroBola = 10;
+      var espessuraRaquete = 10;
+      var alturaRaquete = 100;
+
+      var efeitoRaquete = 0.3;
+
+      var posicaoJogador1 = 40;
+      var posicaoJogador2 = 350;
+
       var posicaoBolaX = 10;
       var posicaoBolaY = 10;
-      var velocidadeBolaPosicaoX = 3;
-      var velocidadeBolaPosicaoY = 3;
+      var velocidadeBolaPosicaoX = 20;
+      var velocidadeBolaPosicaoY = 20;
+      var pontuacaoJogador2 = 0;
+      var pontuacaoJogador1 = 0;
+      var velocidadeJogador2 = 5;
+      var velocidadeJogador1 = 5;
+
+      folhaDesenho.addEventListener('mousemove', function(e){
+        posicaoJogador1 = e.clientY - alturaRaquete / 2;
+      });
 
         function executar(){
-            var folhaDesenho = document.getElementById("folha");
-            var areaDesenho = folhaDesenho.getContext("2d");
-
-            var larguraCampo = 600 ;
-            var alturaCampo = 500;
-            var espessuraRede = 5;
-
-            var diametroBola = 10;
 
             //Cor Verde
             areaDesenho.fillStyle = "#286047" ;
@@ -32,6 +48,14 @@
 
             //Posição da bola
             areaDesenho.fillRect(posicaoBolaX - diametroBola / 2, posicaoBolaY - diametroBola / 2, diametroBola, diametroBola);
+
+            //Raquetes
+            areaDesenho.fillRect(0, posicaoJogador1, espessuraRaquete, alturaRaquete);
+            areaDesenho.fillRect(larguraCampo - espessuraRaquete, posicaoJogador2, espessuraRaquete, alturaRaquete);
+
+            //escrever pontuação dos jogadores
+            areaDesenho.fillText("Humano - " + pontuacaoJogador1 + " Pontos", 100,100);
+            areaDesenho.fillText("Computador - " + pontuacaoJogador2 + " Pontos", larguraCampo - 200 ,100);
 
 
             posicaoBolaX = posicaoBolaX +  velocidadeBolaPosicaoX ;
@@ -47,8 +71,52 @@
           velocidadeBolaPosicaoY = -velocidadeBolaPosicaoY;
         }
 
-            console.log("tic-tac");
+        //verifica se jogador2 fez ponto
+        if (posicaoBolaX < 0){
+          if(posicaoBolaY > posicaoJogador1 && posicaoBolaY < posicaoJogador1 + alturaRaquete){
+            //rebater a bola
+            velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+            var diferencaY = posicaoBolaY - (posicaoJogador1 + alturaRaquete /2);
+            velocidadeBolaPosicaoY = diferencaY * efeitoRaquete ;
+
+          }else{
+            //ponto jogador 2
+            pontuacaoJogador2 = pontuacaoJogador2 + 1;
+            //colocar bola no centro
+            posicaoBolaX = larguraCampo / 2;
+            posicaoBolaY = alturaCampo / 2;
+            velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+            velocidadeBolaPosicaoY =10;
+          }
         }
+
+        //verifica se jogador 1 fez ponto
+        if (posicaoBolaX > larguraCampo){
+          if(posicaoBolaY > posicaoJogador2 && posicaoBolaY < posicaoJogador2 + alturaRaquete){
+            //rebater a bola
+            velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+            var diferencaY = posicaoBolaY - (posicaoJogador2 + alturaRaquete /2);
+            velocidadeBolaPosicaoX = diferencaY * efeitoRaquete ;
+          }else {
+            //ponto jogador 1
+            pontuacaoJogador1 = pontuacaoJogador1 + 1;
+            //colocar bola centro
+            posicaoBolaX = larguraCampo / 2;
+            posicaoBolaY = alturaCampo / 2;
+            velocidadeBolaPosicaoX = -velocidadeBolaPosicaoX;
+            velocidadeBolaPosicaoY =10;
+          }
+
+        }
+
+        //atualiza posição jogador 2
+        if (posicaoJogador2 + alturaRaquete /2 < posicaoBolaY){
+          posicaoJogador2 = posicaoJogador2 + velocidadeJogador2;
+        }else {
+          posicaoJogador2 = posicaoJogador2 - velocidadeJogador2;
+        }
+
+      }
       </script>
   </body>
 </html>
